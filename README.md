@@ -1,6 +1,4 @@
-# Experimentations
-GitHub repo containing experiments on various branches
+# Run me!
 
-## Check the branches
-I'd prefer to make this garbage repo instead of creating over 9 thousands ones.
-
+`$ python3 converter_poc.py`  
+(or) `$ python3.10 converter_poc.py`
