@@ -1,6 +1,3 @@
-# Experimentations
-GitHub repo containing experiments on various branches
+# Run me!
 
-## Check the branches
-I'd prefer to make this garbage repo instead of creating over 9 thousands ones.
-
+`$ gcc -Wall -Werror guess-number.c && ./a.out`
