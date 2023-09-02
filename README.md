@@ -1,3 +1,4 @@
-# Run me!
+# Demo
 
-`$ gcc -Wall -Werror guess-number.c && ./a.out`
+(Desktop only)  
+[https://codepen.io/gustaveWPM/pen/VwqjoxK](https://codepen.io/gustaveWPM/pen/VwqjoxK)
