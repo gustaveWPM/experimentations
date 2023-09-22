@@ -19,12 +19,11 @@ body {
   bottom: 0;
   right: 0;
   overflow-y: scroll;
-  background-color: #DDD;
+  background-color: #ddd;
 }
 
 .content {
   margin-right: var(--sidebar-width);
-  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -38,6 +37,7 @@ body {
 
 .chat {
   height: fit-content;
+  flex: 1;
   overflow-y: auto;
   background-color: blue;
   color: #fff;
