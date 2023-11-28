@@ -1,0 +1,5 @@
+{
+  "extends": "@wpm-repo/typescript-config/nextjs.json",
+  "include": ["src", "*.config.js", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

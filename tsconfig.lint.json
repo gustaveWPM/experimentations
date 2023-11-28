@@ -1,0 +1,3 @@
+{
+  "extends": "@wpm-repo/typescript-config/base.json"
+}
