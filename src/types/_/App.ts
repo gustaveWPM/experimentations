@@ -14,7 +14,9 @@ export type Quadrants = Quadrant[];
 export type QuadrantsSets = Set<FilledSudokuCell>[];
 export type QuadrantId = number;
 export type IllegalQuadrantsArchive = Set<QuadrantId>;
-export type CheckersMemory = Record<FilledSudokuCell, QuadrantId[]>;
+export type UnsafeCheckerMemoryValues = QuadrantId[];
+export type SafeCheckerMemoryValues = Set<QuadrantId>;
+export type CheckerMemory = Record<FilledSudokuCell, SafeCheckerMemoryValues | UnsafeCheckerMemoryValues>;
 
 export type ErrorCtx = boolean;
 export type XCoord = number;

@@ -1,7 +1,7 @@
 import { fromPointToQuadrantId, quadrantsToSets, toAsc } from "@/lib/convert";
 import dumpQuadrant from "@/lib/dumpQuadrant";
 import type {
-  CheckersMemory,
+  CheckerMemory,
   ErrorCtx,
   FilledSudokuCell,
   FinalOutput,
@@ -17,18 +17,20 @@ import type {
   QuadrantSize,
   Quadrants,
   QuadrantsSets,
+  SafeCheckerMemoryValues,
   StrictSudokuEntries,
+  UnsafeCheckerMemoryValues,
   VerboseMode,
   XCoord,
   YCoord,
 } from "@/types";
 import { EMPTY_CELL } from "@/utils/emptyCell";
 
-const mallocValuesOccurrencesMemory = (gridSize: GridSize): CheckersMemory =>
+const mallocValuesOccurrencesMemory = (gridSize: GridSize, isVerbose: VerboseMode): CheckerMemory =>
   Array.from({ length: gridSize }, (_, i) => i + 1).reduce((memory, cellValue) => {
-    memory[cellValue] = [];
+    memory[cellValue] = isVerbose ? new Set<QuadrantId>() : [];
     return memory;
-  }, {} as CheckersMemory);
+  }, {} as CheckerMemory);
 
 export function isInvalidQuadrant(quadrant: Quadrant) {
   const filteredQuadrant = quadrant.flat().filter((cell) => cell !== EMPTY_CELL) as FilledSudokuCell[];
@@ -38,14 +40,14 @@ export function isInvalidQuadrant(quadrant: Quadrant) {
 }
 
 function populateIllegalQuadrantsArchivesWithMemory(
-  memory: CheckersMemory,
+  memory: CheckerMemory,
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive>,
   gridSize: GridSize,
   isVerbose: VerboseMode,
 ): MutateValuesEffect {
   for (let i: FilledSudokuCell = 1; i <= gridSize; i++) {
-    if (memory[i].length > 1) {
+    if ((!isVerbose && (memory[i] as UnsafeCheckerMemoryValues).length > 1) || (isVerbose && (memory[i] as SafeCheckerMemoryValues).size > 1)) {
       for (const quadrantId of memory[i]) {
         illegalQuadrantsArchive.add(quadrantId);
         if (isVerbose) (illegalQuadrantsArchive2 as IllegalQuadrantsArchive).add(quadrantId);
@@ -119,13 +121,14 @@ async function checkRows(
   const illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive> = isVerbose ? new Set<QuadrantId>() : undefined;
 
   for (let y: YCoord = 0; y < gridSize; y++) {
-    const rowMemory: CheckersMemory = mallocValuesOccurrencesMemory(gridSize);
+    const rowMemory: CheckerMemory = mallocValuesOccurrencesMemory(gridSize, isVerbose);
 
     for (let x: XCoord = 0; x < gridSize; x++) {
       const cellValue = input[y][x];
       if (cellValue === EMPTY_CELL) continue;
       const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize, quadrantSize);
-      rowMemory[cellValue].push(quadrantId);
+      if (!isVerbose) (rowMemory[cellValue] as UnsafeCheckerMemoryValues).push(quadrantId);
+      else (rowMemory[cellValue] as SafeCheckerMemoryValues).add(quadrantId);
     }
 
     populateIllegalQuadrantsArchivesWithMemory(rowMemory, illegalQuadrantsArchive, illegalQuadrantsArchive2, gridSize, isVerbose);
@@ -156,13 +159,14 @@ async function checkColumns(
   const illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive> = isVerbose ? new Set<QuadrantId>() : undefined;
 
   for (let x: XCoord = 0; x < gridSize; x++) {
-    const columnMemory: CheckersMemory = mallocValuesOccurrencesMemory(gridSize);
+    const columnMemory: CheckerMemory = mallocValuesOccurrencesMemory(gridSize, isVerbose);
 
     for (let y: YCoord = 0; y < input.length; y++) {
       const cellValue = input[y][x];
       if (cellValue === EMPTY_CELL) continue;
       const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize, quadrantSize);
-      columnMemory[cellValue].push(quadrantId);
+      if (!isVerbose) (columnMemory[cellValue] as UnsafeCheckerMemoryValues).push(quadrantId);
+      else (columnMemory[cellValue] as SafeCheckerMemoryValues).add(quadrantId);
     }
 
     populateIllegalQuadrantsArchivesWithMemory(columnMemory, illegalQuadrantsArchive, illegalQuadrantsArchive2, gridSize, isVerbose);
@@ -191,13 +195,14 @@ async function checkDiagonalFromTopLeftToBottomRight(
   quadrants: Quadrants,
 ): Promise<MutateValuesEffect> {
   const illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive> = isVerbose ? new Set<QuadrantId>() : undefined;
-  const diagonalMemory: CheckersMemory = mallocValuesOccurrencesMemory(gridSize);
+  const diagonalMemory: CheckerMemory = mallocValuesOccurrencesMemory(gridSize, isVerbose);
 
   for (let x: XCoord = 0, y: YCoord = 0; y < gridSize; x++, y++) {
     const cellValue = input[y][x];
     if (cellValue === EMPTY_CELL) continue;
     const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize, quadrantSize);
-    diagonalMemory[cellValue].push(quadrantId);
+    if (!isVerbose) (diagonalMemory[cellValue] as UnsafeCheckerMemoryValues).push(quadrantId);
+    else (diagonalMemory[cellValue] as SafeCheckerMemoryValues).add(quadrantId);
   }
 
   populateIllegalQuadrantsArchivesWithMemory(diagonalMemory, illegalQuadrantsArchive, illegalQuadrantsArchive2, gridSize, isVerbose);
@@ -225,13 +230,14 @@ async function checkDiagonalFromBottomLeftToTopRight(
   quadrants: Quadrants,
 ): Promise<MutateValuesEffect> {
   const illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive> = isVerbose ? new Set<QuadrantId>() : undefined;
-  const diagonalMemory: CheckersMemory = mallocValuesOccurrencesMemory(gridSize);
+  const diagonalMemory: CheckerMemory = mallocValuesOccurrencesMemory(gridSize, isVerbose);
 
   for (let x: XCoord = gridSize - 1, y: YCoord = 0; y < gridSize; x--, y++) {
     const cellValue = input[y][x];
     if (cellValue === EMPTY_CELL) continue;
     const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize, quadrantSize);
-    diagonalMemory[cellValue].push(quadrantId);
+    if (!isVerbose) (diagonalMemory[cellValue] as UnsafeCheckerMemoryValues).push(quadrantId);
+    else (diagonalMemory[cellValue] as SafeCheckerMemoryValues).add(quadrantId);
   }
 
   populateIllegalQuadrantsArchivesWithMemory(diagonalMemory, illegalQuadrantsArchive, illegalQuadrantsArchive2, gridSize, isVerbose);

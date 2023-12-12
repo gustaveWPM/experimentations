@@ -54,12 +54,12 @@ It's a tad more captivating than a downright silly kata, as it might come in han
       <td><code>ts-node</code> script, using <em>bun</em>'s <em>TypeScript</em> runtime</td>
     </tr>
     <tr>
-      <td>~22.66014s seconds</td>
-      <td>~23.40776s seconds</td>
+      <td>~22.80927s seconds</td>
+      <td>~23.03917s seconds</td>
     </tr>
     <tr>
-      <td>~22.6µs per grid</td>
-      <td>~23.4µs per grid</td>
+      <td>~22.8µs per grid</td>
+      <td>~23.03µs per grid</td>
     </tr>
   </table>
   <em>(Benchmarked with a poor <strong>Intel i3-10110U (4) @ 4.100GHz</strong>, and <strong>7675MiB of RAM</strong>.)</em>
