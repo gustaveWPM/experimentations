@@ -1,7 +1,10 @@
+import { config } from "@/config";
 import FailedToInitializeError from "@/errors/FailedToInitialize";
 import type { BuiltProgramOptions, LegalFinalOutput } from "@/types";
 import { EMPTY_CELL as _ } from "@/utils/emptyCell";
 import { strictSudokuKata, unstrictSudokuKata } from "../app";
+
+const { DEFAULT_QUADRANT_SIZE } = config;
 
 describe("Fail to initialize", () => {
   const gridSize = 6;
@@ -100,7 +103,7 @@ describe("Happy path walkthrough", () => {
 });
 
 describe("Unhappy paths walkthrough", () => {
-  const [gridSize, isVerbose]: BuiltProgramOptions = [9, true];
+  const [gridSize, , isVerbose]: BuiltProgramOptions = [9, DEFAULT_QUADRANT_SIZE, true];
 
   beforeEach(() => {
     jest.spyOn(console, "log").mockImplementation(jest.fn());
@@ -112,17 +115,17 @@ describe("Unhappy paths walkthrough", () => {
     const output = await strictSudokuKata(
       // biome-ignore format: the array should not be formatted
       [
-        [5, 8, 1, 4, 2, 7, 6, 9, 3],
-        [3, 7, 4, 5, 9, 6, 8, 1, 2],
-        [9, 5, 2, 1, 3, 8, 9, 7, 5],
+        [5, 8, 1,  4, 2, 7,  6, 9, 3],
+        [3, 7, 4,  5, 9, 6,  8, 1, 2],
+        [9, 5, 2,  1, 3, 8,  9, 7, 5],
 
-        [6, 2, 9, 3, 8, 5, 7, 4, 1],
-        [1, 5, 7, 9, _, 4, 3, 2, 8],
-        [8, 4, 3, 2, 7, 1, 5, 6, 9],
+        [6, 2, 9,  3, 8, 5,  7, 4, 1],
+        [1, 5, 7,  9, _, 4,  3, 2, 8],
+        [8, 4, 3,  2, 7, 1,  5, 6, 9],
 
-        [4, 1, 8, 7, 5, 2, 9, 3, 6],
-        [2, 9, 5, 6, 4, 3, 1, 5, 7],
-        [7, 3, 6, 8, 1, 9, 2, 5, 4],
+        [4, 1, 8,  7, 5, 2,  9, 3, 6],
+        [2, 9, 5,  6, 4, 3,  1, 5, 7],
+        [7, 3, 6,  8, 1, 9,  2, 5, 4],
       ],
       { gridSize, isVerbose },
     );

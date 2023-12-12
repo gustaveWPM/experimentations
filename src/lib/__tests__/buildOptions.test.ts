@@ -1,11 +1,11 @@
 import { config } from "@/config";
 import buildOptions from "../buildOptions";
 
-const { DEFAULT_GRID_SIZE, DEFAULT_VERBOSE_MODE } = config;
+const { DEFAULT_GRID_SIZE, DEFAULT_QUADRANT_SIZE, DEFAULT_VERBOSE_MODE } = config;
 
 describe("buildOptions", () => {
   it("should pass, given no input and expecting the valid default output", () => {
-    expect(buildOptions()).toStrictEqual([DEFAULT_GRID_SIZE, DEFAULT_VERBOSE_MODE]);
+    expect(buildOptions()).toStrictEqual([DEFAULT_GRID_SIZE, DEFAULT_QUADRANT_SIZE, DEFAULT_VERBOSE_MODE]);
   });
 
   it("should pass, given a partial input and expecting the valid output", () => {
@@ -14,7 +14,7 @@ describe("buildOptions", () => {
       buildOptions({
         gridSize,
       }),
-    ).toStrictEqual([gridSize, DEFAULT_VERBOSE_MODE]);
+    ).toStrictEqual([gridSize, DEFAULT_QUADRANT_SIZE, DEFAULT_VERBOSE_MODE]);
   });
 
   it("should pass, given a partial input and expecting the valid output", () => {
@@ -23,7 +23,7 @@ describe("buildOptions", () => {
       buildOptions({
         isVerbose,
       }),
-    ).toStrictEqual([DEFAULT_GRID_SIZE, isVerbose]);
+    ).toStrictEqual([DEFAULT_GRID_SIZE, DEFAULT_QUADRANT_SIZE, isVerbose]);
   });
 
   it("should pass, given a full input and expecting the valid output", () => {
@@ -34,6 +34,17 @@ describe("buildOptions", () => {
         isVerbose,
         gridSize,
       }),
-    ).toStrictEqual([gridSize, isVerbose]);
+    ).toStrictEqual([gridSize, DEFAULT_QUADRANT_SIZE, isVerbose]);
+  });
+
+  it("should pass, given a full input and expecting the valid output", () => {
+    const quadrantSize = 3;
+    const isVerbose = false;
+    expect(
+      buildOptions({
+        isVerbose,
+        quadrantSize,
+      }),
+    ).toStrictEqual([DEFAULT_GRID_SIZE, quadrantSize, isVerbose]);
   });
 });

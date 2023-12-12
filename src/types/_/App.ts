@@ -1,6 +1,4 @@
-import type { Tuple } from "./Utils";
-
-type QuadrantSize = number;
+export type QuadrantSize = number;
 export type GridSize = number;
 
 export type EmptySudokuCell = "x";
@@ -30,15 +28,16 @@ export type FinalOutput = LegalFinalOutput | IllegalFinalOutput;
 
 export type Config = {
   DEFAULT_GRID_SIZE: GridSize;
-  QUADRANT_SIZE: QuadrantSize;
+  DEFAULT_QUADRANT_SIZE: QuadrantSize;
   DEFAULT_VERBOSE_MODE: VerboseMode;
 };
 
 export type ProgramOptions = Partial<{
   gridSize: GridSize;
+  quadrantSize: QuadrantSize;
   isVerbose: VerboseMode;
 }>;
 
-export type BuiltProgramOptions = Tuple<GridSize, VerboseMode>;
+export type BuiltProgramOptions = [GridSize, QuadrantSize, VerboseMode];
 
 export type MutateValuesEffect = void;

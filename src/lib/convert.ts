@@ -1,11 +1,11 @@
-import { config } from "@/config";
 import InvalidRowLengthError from "@/errors/InvalidRowLength";
-import { throwIfInvalidGridSize, throwIfMissingRows } from "@/lib/validators";
+import { throwIfInvalidGridSize, throwIfInvalidQuadrantSize, throwIfMissingRows } from "@/lib/validators";
 import type {
   EmptySudokuCell,
   FilledSudokuCell,
   GridSize,
   QuadrantId,
+  QuadrantSize,
   Quadrants,
   QuadrantsSets,
   StrictSudokuEntries,
@@ -17,16 +17,15 @@ import type {
 } from "@/types";
 import { EMPTY_CELL } from "@/utils/emptyCell";
 
-const { QUADRANT_SIZE } = config;
-
 /**
  * @throws {InvalidGridSizeError}
  * @throws {InvalidRowLengthError}
  * @throws {MissingRowsError}
  * Unused, just here for the vine.
  */
-export function toUnstrict(input: StrictSudokuEntries, gridSize: GridSize): UnstrictSudokuEntries {
-  throwIfInvalidGridSize(gridSize);
+export function toUnstrict(input: StrictSudokuEntries, gridSize: GridSize, quadrantSize: QuadrantSize): UnstrictSudokuEntries {
+  throwIfInvalidQuadrantSize(quadrantSize);
+  throwIfInvalidGridSize(gridSize, quadrantSize);
   throwIfMissingRows(input, gridSize);
 
   const toUnstrictResult: UnstrictSudokuEntries = [];
@@ -45,8 +44,9 @@ export function toUnstrict(input: StrictSudokuEntries, gridSize: GridSize): Unst
  * @throws {InvalidRowLengthError}
  * @throws {MissingRowsError}
  */
-export function toStrict(input: UnstrictSudokuEntries, gridSize: GridSize): StrictSudokuEntries {
-  throwIfInvalidGridSize(gridSize);
+export function toStrict(input: UnstrictSudokuEntries, gridSize: GridSize, quadrantSize: QuadrantSize): StrictSudokuEntries {
+  throwIfInvalidQuadrantSize(quadrantSize);
+  throwIfInvalidGridSize(gridSize, quadrantSize);
   throwIfMissingRows(input, gridSize);
 
   const isEmptyCell = (c: string): c is EmptySudokuCell => c === "x";
@@ -85,5 +85,5 @@ export function quadrantsToSets(quadrants: Quadrants): QuadrantsSets {
 
 export const toAsc = (array: number[]): number[] => array.sort((n1, n2) => n1 - n2);
 
-export const fromPointToQuadrantId = (x: XCoord, y: YCoord, gridSize: GridSize): QuadrantId =>
-  Math.trunc(x / QUADRANT_SIZE) + 1 + Math.trunc(y / QUADRANT_SIZE) * (gridSize / QUADRANT_SIZE);
+export const fromPointToQuadrantId = (x: XCoord, y: YCoord, gridSize: GridSize, quadrantSize: QuadrantSize): QuadrantId =>
+  Math.trunc(x / quadrantSize) + 1 + Math.trunc(y / quadrantSize) * (gridSize / quadrantSize);

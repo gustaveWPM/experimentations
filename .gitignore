@@ -1,6 +1,7 @@
 node_modules
 coverage
 dist
+*.tsbuildinfo
 
 .vscode/*
 !.vscode/settings.json

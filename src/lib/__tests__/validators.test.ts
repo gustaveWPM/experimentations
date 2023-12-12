@@ -1,12 +1,19 @@
-import { config } from "@/config";
 import InvalidCellValueError from "@/errors/InvalidCellValue";
 import InvalidGridSizeError from "@/errors/InvalidGridSize";
+import InvalidQuadrantSizeError from "@/errors/InvalidQuadrantSize";
 import InvalidRowLengthError from "@/errors/InvalidRowLength";
 import MissingRowsError from "@/errors/MissingRows";
 import type { Config, StrictSudokuEntries } from "@/types";
-import { throwIfInvalidCellValue, throwIfInvalidConfig, throwIfInvalidGridSize, throwIfInvalidRowsLength, throwIfMissingRows } from "../validators";
+import {
+  throwIfInvalidCellValue,
+  throwIfInvalidConfig,
+  throwIfInvalidGridSize,
+  throwIfInvalidQuadrantSize,
+  throwIfInvalidRowsLength,
+  throwIfMissingRows,
+} from "../validators";
 
-const { QUADRANT_SIZE } = config;
+const QUADRANT_SIZE = 3;
 
 describe("throwIfInvalidCellValue", () => {
   it("should pass, given an invalid input and expecting the function to throw", () => {
@@ -18,17 +25,39 @@ describe("throwIfInvalidCellValue", () => {
   });
 });
 
+describe("throwIfInvalidQuadrantSize", () => {
+  it("should pass, given a quadrant size which isn't an integer and expecting the function to throw", () => {
+    expect(() => throwIfInvalidQuadrantSize(3.3)).toThrow(InvalidQuadrantSizeError);
+  });
+
+  it("should pass, given a quadrant size which is negative and expecting the function to throw", () => {
+    expect(() => throwIfInvalidQuadrantSize(-1)).toThrow(InvalidQuadrantSizeError);
+  });
+
+  it("should pass, given a quadrant size which is 0 and expecting the function to throw", () => {
+    expect(() => throwIfInvalidQuadrantSize(0)).toThrow(InvalidQuadrantSizeError);
+  });
+});
+
 describe("throwIfInvalidGridSize", () => {
+  it("should pass, given a grid size which isn't an integer and expecting the function to throw", () => {
+    expect(() => throwIfInvalidGridSize(3.3, QUADRANT_SIZE)).toThrow(InvalidGridSizeError);
+  });
+
   it("should pass, given a grid size which isn't a multiple of QUADRANT_SIZE and expecting the function to throw", () => {
-    expect(() => throwIfInvalidGridSize(QUADRANT_SIZE + 1)).toThrow(InvalidGridSizeError);
+    expect(() => throwIfInvalidGridSize(QUADRANT_SIZE + 1, QUADRANT_SIZE)).toThrow(InvalidGridSizeError);
   });
 
   it("should pass, given a grid size which is less than QUADRANT_SIZE * 2, even if it is a multiple of QUADRANT_SIZE, and expecting the function to throw", () => {
-    expect(() => throwIfInvalidGridSize(QUADRANT_SIZE)).toThrow(InvalidGridSizeError);
+    expect(() => throwIfInvalidGridSize(QUADRANT_SIZE, QUADRANT_SIZE)).toThrow(InvalidGridSizeError);
   });
 
   it("should pass, given a grid size which is negative and expecting the function to throw", () => {
-    expect(() => throwIfInvalidGridSize(-1)).toThrow(InvalidGridSizeError);
+    expect(() => throwIfInvalidGridSize(-1, QUADRANT_SIZE)).toThrow(InvalidGridSizeError);
+  });
+
+  it("should pass, given a grid size which is 0 and expecting the function to throw", () => {
+    expect(() => throwIfInvalidGridSize(0, QUADRANT_SIZE)).toThrow(InvalidGridSizeError);
   });
 });
 
@@ -49,9 +78,9 @@ describe("throwIfMissingRows", () => {
 describe("throwIfInvalidConfig", () => {
   it("should pass, given an input which is missing rows and expecting the function to throw", () => {
     const fakeConfig = {
-      QUADRANT_SIZE: 3,
+      DEFAULT_QUADRANT_SIZE: 3,
       DEFAULT_GRID_SIZE: 10,
-    } satisfies Pick<Config, "QUADRANT_SIZE"> & { DEFAULT_GRID_SIZE: number } satisfies Partial<Record<keyof Config, any>>;
+    } satisfies Pick<Config, "DEFAULT_QUADRANT_SIZE"> & { DEFAULT_GRID_SIZE: number } satisfies Partial<Record<keyof Config, any>>;
 
     expect(() => throwIfInvalidConfig(fakeConfig as any)).toThrow(InvalidGridSizeError);
   });

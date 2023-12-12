@@ -3,12 +3,21 @@ import buildOptions from "@/lib/buildOptions";
 import { buildQuadrants } from "@/lib/buildQuadrants";
 import { toStrict } from "@/lib/convert";
 import { throwIfInvalidCellValue, throwIfInvalidConfig, throwIfInvalidGridSize, throwIfInvalidRowsLength } from "@/lib/validators";
-import type { FinalOutput, GridSize, ProgramOptions, Quadrants, StrictSudokuEntries, UnstrictSudokuEntries, VerboseMode } from "@/types";
+import type {
+  FinalOutput,
+  GridSize,
+  ProgramOptions,
+  QuadrantSize,
+  Quadrants,
+  StrictSudokuEntries,
+  UnstrictSudokuEntries,
+  VerboseMode,
+} from "@/types";
 import checkGrid from "./checkers";
 
-async function processGrid(input: StrictSudokuEntries, gridSize: GridSize, isVerbose: VerboseMode): Promise<FinalOutput> {
-  const quadrants: Quadrants = buildQuadrants(input, gridSize);
-  const finalOutput: FinalOutput = await checkGrid(input, quadrants, gridSize, isVerbose);
+async function processGrid(input: StrictSudokuEntries, gridSize: GridSize, quadrantSize: QuadrantSize, isVerbose: VerboseMode): Promise<FinalOutput> {
+  const quadrants: Quadrants = buildQuadrants(input, gridSize, quadrantSize);
+  const finalOutput: FinalOutput = await checkGrid(input, quadrants, gridSize, quadrantSize, isVerbose);
   return finalOutput;
 }
 
@@ -17,16 +26,16 @@ async function processGrid(input: StrictSudokuEntries, gridSize: GridSize, isVer
  */
 export async function unstrictSudokuKata(unstrictInput: UnstrictSudokuEntries, options?: ProgramOptions): Promise<FinalOutput> {
   const input: StrictSudokuEntries = [];
-  const [gridSize, isVerbose] = buildOptions(options ?? {});
+  const [gridSize, quadrantSize, isVerbose] = buildOptions(options ?? {});
 
   try {
     throwIfInvalidConfig();
-    input.push(...toStrict(unstrictInput, gridSize));
+    input.push(...toStrict(unstrictInput, gridSize, quadrantSize));
   } catch (error: unknown) {
     // @ts-ignore
     throw new FailedToInitializeError(error.message, error);
   }
-  const finalOutput: FinalOutput = await processGrid(input, gridSize, isVerbose);
+  const finalOutput: FinalOutput = await processGrid(input, gridSize, quadrantSize, isVerbose);
   return finalOutput;
 }
 
@@ -34,11 +43,11 @@ export async function unstrictSudokuKata(unstrictInput: UnstrictSudokuEntries, o
  * @throws {FailedToInitializeError}
  */
 export async function strictSudokuKata(input: StrictSudokuEntries, options?: ProgramOptions): Promise<FinalOutput> {
-  const [gridSize, isVerbose] = buildOptions(options ?? {});
+  const [gridSize, quadrantSize, isVerbose] = buildOptions(options ?? {});
 
   try {
     throwIfInvalidConfig();
-    throwIfInvalidGridSize(gridSize);
+    throwIfInvalidGridSize(gridSize, quadrantSize);
     throwIfInvalidRowsLength(input, gridSize);
     throwIfInvalidCellValue(input, gridSize);
   } catch (error: unknown) {
@@ -46,6 +55,6 @@ export async function strictSudokuKata(input: StrictSudokuEntries, options?: Pro
     throw new FailedToInitializeError(error.message, error);
   }
 
-  const finalOutput: FinalOutput = await processGrid(input, gridSize, isVerbose);
+  const finalOutput: FinalOutput = await processGrid(input, gridSize, quadrantSize, isVerbose);
   return finalOutput;
 }

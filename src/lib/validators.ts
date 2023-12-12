@@ -1,23 +1,43 @@
 import { config } from "@/config";
 import InvalidCellValueError from "@/errors/InvalidCellValue";
 import InvalidGridSizeError from "@/errors/InvalidGridSize";
+import InvalidQuadrantSizeError from "@/errors/InvalidQuadrantSize";
 import InvalidRowLengthError from "@/errors/InvalidRowLength";
 import MissingRowsError from "@/errors/MissingRows";
-import type { Config, GridSize, StrictSudokuEntries, UnstrictSudokuEntries } from "@/types";
+import type { Config, GridSize, QuadrantSize, StrictSudokuEntries, UnstrictSudokuEntries } from "@/types";
 
-const { QUADRANT_SIZE } = config;
+/**
+ * @throws {InvalidQuadrantSizeError}
+ */
+export function throwIfInvalidQuadrantSize(quadrantSize: QuadrantSize): void {
+  if (quadrantSize <= 1) {
+    throw new InvalidQuadrantSizeError("The quadrant size must be greater than or equal to 1.");
+  }
+
+  if (!Number.isInteger(quadrantSize)) {
+    throw new InvalidQuadrantSizeError("The quadrant size must be an integer.");
+  }
+}
 
 /**
  * @throws {InvalidGridSizeError}
  */
-export function throwIfInvalidGridSize(gridSize: GridSize): void {
-  if (gridSize % QUADRANT_SIZE !== 0) {
-    throw new InvalidGridSizeError(`The grid size must be a multiple of ${QUADRANT_SIZE}.`);
+export function throwIfInvalidGridSize(gridSize: GridSize, quadrantSize: QuadrantSize): void {
+  if (!Number.isInteger(gridSize)) {
+    throw new InvalidGridSizeError("The grid size must be an integer.");
   }
 
-  if (gridSize < QUADRANT_SIZE * 2) {
+  if (gridSize <= 1) {
+    throw new InvalidGridSizeError("The grid size must be greater than or equal to 1.");
+  }
+
+  if (gridSize % quadrantSize !== 0) {
+    throw new InvalidGridSizeError(`The grid size must be a multiple of ${quadrantSize} (quadrantSize).`);
+  }
+
+  if (gridSize < quadrantSize * 2) {
     throw new InvalidGridSizeError(
-      `The grid size is too tiny. It must be greater or equal to ${QUADRANT_SIZE * 2}, and is currently equal to ${gridSize}.` +
+      `The grid size is too tiny. It must be greater or equal to ${quadrantSize * 2} (quadrantSize * 2), and is currently equal to ${gridSize}.` +
         " " +
         "Maybe you would use isInvalidQuadrant?",
     );
@@ -59,4 +79,5 @@ export function throwIfMissingRows(input: StrictSudokuEntries | UnstrictSudokuEn
 /**
  * @throws {InvalidGridSizeError}
  */
-export const throwIfInvalidConfig = (__CONFIG: Config = config): void => throwIfInvalidGridSize(__CONFIG.DEFAULT_GRID_SIZE);
+export const throwIfInvalidConfig = (__CONFIG: Config = config): void =>
+  throwIfInvalidGridSize(__CONFIG.DEFAULT_GRID_SIZE, __CONFIG.DEFAULT_QUADRANT_SIZE);

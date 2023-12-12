@@ -3,6 +3,8 @@ import type { FilledSudokuCell, QuadrantsSets, StrictSudokuEntries } from "@/typ
 import { EMPTY_CELL as _ } from "@/utils/emptyCell";
 import { fromPointToQuadrantId, quadrantsToSets, toAsc, toStrict, toUnstrict } from "../convert";
 
+const QUADRANT_SIZE = 3;
+
 describe("toStrict", () => {
   it("should pass, given a valid unstrict grid and expecting its valid converted value as a strict grid", () => {
     const gridSize = 6;
@@ -16,6 +18,7 @@ describe("toStrict", () => {
           'x,2,X,4,5,6', 'X,2,X,4,5,6'
         ],
         gridSize,
+        QUADRANT_SIZE,
       ),
     ).toStrictEqual(
       // biome-ignore format: the array should not be formatted
@@ -42,6 +45,7 @@ describe("toStrict", () => {
           'x,2,X,4,5,6', 'X,2,X,4,5,6'
         ],
         gridSize,
+        QUADRANT_SIZE,
       ),
     ).toThrow(InvalidRowLengthError);
   });
@@ -60,6 +64,7 @@ describe("toUnstrict", () => {
           [_, 2, _, 4, 5, 6], [_, 2, _, 4, 5, 6]
         ],
         gridSize,
+        QUADRANT_SIZE,
       ),
     ).toStrictEqual(
       // biome-ignore format: the array should not be formatted
@@ -79,6 +84,7 @@ describe("toUnstrict", () => {
           [_, 2, _, 4, 5, 6], [_, 2, _, 4, 5, 6]
         ],
         gridSize,
+        QUADRANT_SIZE,
       ),
     ).toThrow(InvalidRowLengthError);
   });
@@ -170,14 +176,14 @@ describe("fromPointToQuadrantId", () => {
   const gridSize = 9;
 
   it("should pass", () => {
-    expect(fromPointToQuadrantId(0, 0, gridSize)).toBe(1);
-    expect(fromPointToQuadrantId(3, 0, gridSize)).toBe(2);
-    expect(fromPointToQuadrantId(6, 0, gridSize)).toBe(3);
-    expect(fromPointToQuadrantId(0, 4, gridSize)).toBe(4);
-    expect(fromPointToQuadrantId(3, 4, gridSize)).toBe(5);
-    expect(fromPointToQuadrantId(6, 4, gridSize)).toBe(6);
-    expect(fromPointToQuadrantId(0, 8, gridSize)).toBe(7);
-    expect(fromPointToQuadrantId(5, 8, gridSize)).toBe(8);
-    expect(fromPointToQuadrantId(8, 8, gridSize)).toBe(9);
+    expect(fromPointToQuadrantId(0, 0, gridSize, QUADRANT_SIZE)).toBe(1);
+    expect(fromPointToQuadrantId(3, 0, gridSize, QUADRANT_SIZE)).toBe(2);
+    expect(fromPointToQuadrantId(6, 0, gridSize, QUADRANT_SIZE)).toBe(3);
+    expect(fromPointToQuadrantId(0, 4, gridSize, QUADRANT_SIZE)).toBe(4);
+    expect(fromPointToQuadrantId(3, 4, gridSize, QUADRANT_SIZE)).toBe(5);
+    expect(fromPointToQuadrantId(6, 4, gridSize, QUADRANT_SIZE)).toBe(6);
+    expect(fromPointToQuadrantId(0, 8, gridSize, QUADRANT_SIZE)).toBe(7);
+    expect(fromPointToQuadrantId(5, 8, gridSize, QUADRANT_SIZE)).toBe(8);
+    expect(fromPointToQuadrantId(8, 8, gridSize, QUADRANT_SIZE)).toBe(9);
   });
 });

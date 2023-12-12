@@ -14,6 +14,7 @@ import type {
   MutateValuesEffect,
   Quadrant,
   QuadrantId,
+  QuadrantSize,
   Quadrants,
   QuadrantsSets,
   StrictSudokuEntries,
@@ -63,10 +64,11 @@ function dumpError(describe: string, quadrants: Quadrants, illegalQuadrantsArchi
 
     for (const id of illegalQuadrantsIds) {
       const i = id - 1;
-      console.error(`${describe}: ${id}`);
+      console.error(`${describe}, id: ${id}`);
       dumpQuadrant(quadrants[i]);
       if (id !== lastId) console.error();
     }
+    console.error();
   }
 
   const illegalQuadrantsIds: QuadrantId[] = Array.from(illegalQuadrantsArchive2 as IllegalQuadrantsArchive);
@@ -109,6 +111,7 @@ async function checkQuadrants(
 async function checkRows(
   input: StrictSudokuEntries,
   gridSize: GridSize,
+  quadrantSize: QuadrantSize,
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   isVerbose: VerboseMode,
   quadrants: Quadrants,
@@ -121,7 +124,7 @@ async function checkRows(
     for (let x: XCoord = 0; x < gridSize; x++) {
       const cellValue = input[y][x];
       if (cellValue === EMPTY_CELL) continue;
-      const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize);
+      const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize, quadrantSize);
       rowMemory[cellValue].push(quadrantId);
     }
 
@@ -145,6 +148,7 @@ async function checkRows(
 async function checkColumns(
   input: StrictSudokuEntries,
   gridSize: GridSize,
+  quadrantSize: QuadrantSize,
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   isVerbose: VerboseMode,
   quadrants: Quadrants,
@@ -157,7 +161,7 @@ async function checkColumns(
     for (let y: YCoord = 0; y < input.length; y++) {
       const cellValue = input[y][x];
       if (cellValue === EMPTY_CELL) continue;
-      const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize);
+      const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize, quadrantSize);
       columnMemory[cellValue].push(quadrantId);
     }
 
@@ -182,6 +186,7 @@ async function checkDiagonalFromTopLeftToBottomRight(
   input: StrictSudokuEntries,
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   gridSize: GridSize,
+  quadrantSize: QuadrantSize,
   isVerbose: VerboseMode,
   quadrants: Quadrants,
 ): Promise<MutateValuesEffect> {
@@ -191,7 +196,7 @@ async function checkDiagonalFromTopLeftToBottomRight(
   for (let x: XCoord = 0, y: YCoord = 0; y < gridSize; x++, y++) {
     const cellValue = input[y][x];
     if (cellValue === EMPTY_CELL) continue;
-    const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize);
+    const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize, quadrantSize);
     diagonalMemory[cellValue].push(quadrantId);
   }
 
@@ -215,6 +220,7 @@ async function checkDiagonalFromBottomLeftToTopRight(
   input: StrictSudokuEntries,
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   gridSize: GridSize,
+  quadrantSize: QuadrantSize,
   isVerbose: VerboseMode,
   quadrants: Quadrants,
 ): Promise<MutateValuesEffect> {
@@ -224,7 +230,7 @@ async function checkDiagonalFromBottomLeftToTopRight(
   for (let x: XCoord = gridSize - 1, y: YCoord = 0; y < gridSize; x--, y++) {
     const cellValue = input[y][x];
     if (cellValue === EMPTY_CELL) continue;
-    const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize);
+    const quadrantId: QuadrantId = fromPointToQuadrantId(x, y, gridSize, quadrantSize);
     diagonalMemory[cellValue].push(quadrantId);
   }
 
@@ -244,16 +250,22 @@ async function checkDiagonalFromBottomLeftToTopRight(
   }
 }
 
-async function checkGrid(input: StrictSudokuEntries, quadrants: Quadrants, gridSize: GridSize, isVerbose: VerboseMode): Promise<FinalOutput> {
+async function checkGrid(
+  input: StrictSudokuEntries,
+  quadrants: Quadrants,
+  gridSize: GridSize,
+  quadrantSize: QuadrantSize,
+  isVerbose: VerboseMode,
+): Promise<FinalOutput> {
   const sharedIllegalQuadrantsArchive: IllegalQuadrantsArchive = new Set<QuadrantId>();
   const quadrantsSets = quadrantsToSets(quadrants);
 
   const tasks = [
     checkQuadrants(quadrants, quadrantsSets, sharedIllegalQuadrantsArchive, isVerbose),
-    checkRows(input, gridSize, sharedIllegalQuadrantsArchive, isVerbose, quadrants),
-    checkColumns(input, gridSize, sharedIllegalQuadrantsArchive, isVerbose, quadrants),
-    checkDiagonalFromTopLeftToBottomRight(input, sharedIllegalQuadrantsArchive, gridSize, isVerbose, quadrants),
-    checkDiagonalFromBottomLeftToTopRight(input, sharedIllegalQuadrantsArchive, gridSize, isVerbose, quadrants),
+    checkRows(input, gridSize, quadrantSize, sharedIllegalQuadrantsArchive, isVerbose, quadrants),
+    checkColumns(input, gridSize, quadrantSize, sharedIllegalQuadrantsArchive, isVerbose, quadrants),
+    checkDiagonalFromTopLeftToBottomRight(input, sharedIllegalQuadrantsArchive, gridSize, quadrantSize, isVerbose, quadrants),
+    checkDiagonalFromBottomLeftToTopRight(input, sharedIllegalQuadrantsArchive, gridSize, quadrantSize, isVerbose, quadrants),
   ];
 
   await Promise.all(tasks);
