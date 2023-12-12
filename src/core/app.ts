@@ -2,7 +2,13 @@ import FailedToInitializeError from "@/errors/FailedToInitialize";
 import buildOptions from "@/lib/buildOptions";
 import { buildQuadrants } from "@/lib/buildQuadrants";
 import { toStrict } from "@/lib/convert";
-import { throwIfInvalidCellValue, throwIfInvalidConfig, throwIfInvalidGridSize, throwIfInvalidRowsLength } from "@/lib/validators";
+import {
+  throwIfInvalidCellValue,
+  throwIfInvalidConfig,
+  throwIfInvalidGridSize,
+  throwIfInvalidRowsLength,
+  throwIfMissingRows,
+} from "@/lib/validators";
 import type {
   FinalOutput,
   GridSize,
@@ -49,6 +55,7 @@ export async function strictSudokuKata(input: StrictSudokuEntries, options?: Pro
     throwIfInvalidConfig();
     throwIfInvalidGridSize(gridSize, quadrantSize);
     throwIfInvalidRowsLength(input, gridSize);
+    throwIfMissingRows(input, gridSize);
     throwIfInvalidCellValue(input, gridSize);
   } catch (error: unknown) {
     // @ts-ignore

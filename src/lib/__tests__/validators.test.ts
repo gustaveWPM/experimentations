@@ -76,7 +76,7 @@ describe("throwIfMissingRows", () => {
 });
 
 describe("throwIfInvalidConfig", () => {
-  it("should pass, given an input which is missing rows and expecting the function to throw", () => {
+  it("should pass, given an invalid config and expecting the function to throw", () => {
     const fakeConfig = {
       DEFAULT_QUADRANT_SIZE: 3,
       DEFAULT_GRID_SIZE: 10,

@@ -16,9 +16,15 @@ describe("Fail to initialize", () => {
     }).toThrow(FailedToInitializeError);
   });
 
-  it("should pass, given an invalid grid (missing row) and expecting the function to throw", () => {
+  it("should pass, given an invalid grid (missing cell in row) and expecting the function to throw", () => {
     expect(async () => {
       await unstrictSudokuKata([_, _, _, _, _], { gridSize });
+    }).toThrow(FailedToInitializeError);
+  });
+
+  it("should pass, given an invalid grid (missing columns) and expecting the function to throw", () => {
+    expect(async () => {
+      await unstrictSudokuKata([_, _, _, _, _, _], { gridSize });
     }).toThrow(FailedToInitializeError);
   });
 
@@ -36,7 +42,16 @@ describe("Fail to initialize", () => {
 
   it("should pass, given an invalid grid (missing row) and expecting the function to throw", () => {
     expect(async () => {
-      await strictSudokuKata([[_], [_], [_], [_], [_]], { gridSize });
+      await strictSudokuKata(
+        [
+          [_, _, _, _, _, _],
+          [_, _, _, _, _, _],
+          [_, _, _, _, _, _],
+          [_, _, _, _, _, _],
+          [_, _, _, _, _, _],
+        ],
+        { gridSize },
+      );
     }).toThrow(FailedToInitializeError);
   });
 
@@ -46,6 +61,19 @@ describe("Fail to initialize", () => {
         // biome-ignore format: the array should not be formatted
         [
           [1, 2, 3, 4, 5], [1, 2, 3, 4, 5, 6],
+          [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6],
+          [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6]
+        ],
+        { gridSize },
+      );
+    }).toThrow(FailedToInitializeError);
+  });
+
+  it("should pass, given an invalid grid (missing column) and expecting the function to throw", () => {
+    expect(async () => {
+      await strictSudokuKata(
+        // biome-ignore format: the array should not be formatted
+        [
           [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6],
           [1, 2, 3, 4, 5, 6], [1, 2, 3, 4, 5, 6]
         ],
