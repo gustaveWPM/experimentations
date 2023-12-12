@@ -1,4 +1,4 @@
-import config from '@/config';
+import { config } from '@/config';
 import type { BuiltProgramOptions, GridSize, ProgramOptions, VerboseMode } from '@/types';
 
 const { DEFAULT_GRID_SIZE, DEFAULT_VERBOSE_MODE } = config;

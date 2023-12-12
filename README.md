@@ -55,12 +55,12 @@ It's a tad more captivating than a downright silly kata, as it might come in han
       <td><code>ts-node</code> script, using <em>bun</em>'s <em>TypeScript</em> runtime</td>
     </tr>
     <tr>
-      <td>~30.65608s seconds</td>
-      <td>~23.51516s seconds</td>
+      <td>~34.85156s seconds</td>
+      <td>~24.69157s seconds</td>
     </tr>
     <tr>
-      <td>~30.6µs per grid</td>
-      <td>~23.5µs per grid</td>
+      <td>~34.8µs per grid</td>
+      <td>~24.6µs per grid</td>
     </tr>
   </table>
   <em>(Benchmarked with a poor <strong>Intel i3-10110U (4) @ 4.100GHz</strong>, and <strong>7675MiB of RAM</strong>.)</em>
@@ -72,86 +72,95 @@ It's a tad more captivating than a downright silly kata, as it might come in han
   <h3>Coverage</h3>
 
   <table>
-    <tr>
-      <th>File</th>
-      <th>% Funcs</th>
-      <th>% Lines</th>
-    </tr>
-    <tr>
-      <td>All files</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/config/constants.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/config/index.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/core/checkers.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/core/main.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/errors/FailedToInitialize.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/errors/InvalidGridSize.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/errors/InvalidRowLength.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/errors/MissingRows.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/lib/buildOptions.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/lib/buildQuadrants.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/lib/convert.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/lib/dumpQuadrant.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/lib/validators.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
-    <tr>
-      <td>src/utils/emptyCell.ts</td>
-      <td>100.00</td>
-      <td>100.00</td>
-    </tr>
+    <thead>
+      <tr>
+        <th>File</th>
+        <th>% Funcs</th>
+        <th>% Lines</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>All files</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/config/_/config.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/config/index.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/core/app.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/core/checkers.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/errors/FailedToInitialize.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/errors/InvalidCellValue.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/errors/InvalidGridSize.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/errors/InvalidRowLength.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/errors/MissingRows.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/lib/buildOptions.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/lib/buildQuadrants.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/lib/convert.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/lib/dumpQuadrant.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/lib/validators.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+      <tr>
+        <td>src/utils/emptyCell.ts</td>
+        <td>100.00</td>
+        <td>100.00</td>
+      </tr>
+    </tbody>
   </table>
 </div>
 
@@ -166,3 +175,11 @@ Try:
 Read:
 
 - [`package.json` file ("scripts" section)](/package.json)
+
+## Bonus
+
+- Handling _n_ x _n_ grid sizes
+
+## ToDo
+
+- Handling _n_ quadrant sizes (maybe one day!)

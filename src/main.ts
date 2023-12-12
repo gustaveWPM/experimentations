@@ -1,14 +1,14 @@
-import { strictSudokuKata } from '@/core/main';
-import type { FilledSudokuCell, VerboseMode } from './types';
+import { strictSudokuKata } from '@/core/app';
+import type { FilledSudokuCell, MaybeUndefined, VerboseMode } from '@/types';
 
 const isVerbose: VerboseMode = false;
 const doBenchmark = true;
-const doStressTest = false;
+const doStressTest = true;
 
-const startTime = doBenchmark ? performance.now() : undefined;
+const startTime: MaybeUndefined<number> = doBenchmark ? performance.now() : undefined;
 
 async function stressMe() {
-  const v = () => (Math.floor(Math.random() * 9) + 1) as FilledSudokuCell;
+  const v = (): FilledSudokuCell => Math.floor(Math.random() * 9) + 1;
   for (let stress = 0; stress < 1_000_000; stress++) {
     await strictSudokuKata(
       // prettier-ignore

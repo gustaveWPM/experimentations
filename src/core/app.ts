@@ -2,7 +2,7 @@ import FailedToInitializeError from '@/errors/FailedToInitialize';
 import buildOptions from '@/lib/buildOptions';
 import { buildQuadrants } from '@/lib/buildQuadrants';
 import { toStrict } from '@/lib/convert';
-import { throwIfInvalidConfig, throwIfInvalidGridSize, throwIfInvalidRowsLength } from '@/lib/validators';
+import { throwIfInvalidCellValue, throwIfInvalidConfig, throwIfInvalidGridSize, throwIfInvalidRowsLength } from '@/lib/validators';
 import type { FinalOutput, GridSize, ProgramOptions, Quadrants, StrictSudokuEntries, UnstrictSudokuEntries, VerboseMode } from '@/types';
 import checkGrid from './checkers';
 
@@ -12,6 +12,9 @@ async function processGrid(input: StrictSudokuEntries, gridSize: GridSize, isVer
   return finalOutput;
 }
 
+/**
+ * @throws {FailedToInitializeError}
+ */
 export async function unstrictSudokuKata(unstrictInput: UnstrictSudokuEntries, options?: ProgramOptions): Promise<FinalOutput> {
   const input: StrictSudokuEntries = [];
   const [gridSize, isVerbose] = buildOptions(options ?? {});
@@ -27,6 +30,9 @@ export async function unstrictSudokuKata(unstrictInput: UnstrictSudokuEntries, o
   return finalOutput;
 }
 
+/**
+ * @throws {FailedToInitializeError}
+ */
 export async function strictSudokuKata(input: StrictSudokuEntries, options?: ProgramOptions): Promise<FinalOutput> {
   const [gridSize, isVerbose] = buildOptions(options ?? {});
 
@@ -34,10 +40,14 @@ export async function strictSudokuKata(input: StrictSudokuEntries, options?: Pro
     throwIfInvalidConfig();
     throwIfInvalidGridSize(gridSize);
     throwIfInvalidRowsLength(input, gridSize);
+    throwIfInvalidCellValue(input, gridSize);
   } catch (error: unknown) {
     // @ts-ignore
     throw new FailedToInitializeError(error.message, error);
   }
-  const finalOutput: FinalOutput = await processGrid(input, gridSize, isVerbose);
+
+  const sanitizedInput = input.map((row) => row.map((cell) => (cell === 'x' ? 'x' : Math.trunc(cell))));
+
+  const finalOutput: FinalOutput = await processGrid(sanitizedInput, gridSize, isVerbose);
   return finalOutput;
 }

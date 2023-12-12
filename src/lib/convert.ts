@@ -4,10 +4,11 @@ import MissingRowsError from '@/errors/MissingRows';
 // eslint-disable-next-line no-unused-vars
 import InvalidGridSizeError from '@/errors/InvalidGridSize';
 
-import config from '@/config';
+import { config } from '@/config';
 import InvalidRowLengthError from '@/errors/InvalidRowLength';
 import { throwIfInvalidGridSize, throwIfMissingRows } from '@/lib/validators';
 import type {
+  EmptySudokuCell,
   FilledSudokuCell,
   GridSize,
   QuadrantId,
@@ -28,7 +29,7 @@ const { QUADRANT_SIZE } = config;
  * @throws {InvalidGridSizeError}
  * @throws {InvalidRowLengthError}
  * @throws {MissingRowsError}
- * Won't be used, just here for the vine.
+ * Unused, just here for the vine.
  */
 export function toUnstrict(input: StrictSudokuEntries, gridSize: GridSize): UnstrictSudokuEntries {
   throwIfInvalidGridSize(gridSize);
@@ -54,18 +55,21 @@ export function toStrict(input: UnstrictSudokuEntries, gridSize: GridSize): Stri
   throwIfInvalidGridSize(gridSize);
   throwIfMissingRows(input, gridSize);
 
-  const regex = /[1-9|x]/;
+  const isEmptyCell = (c: string): c is EmptySudokuCell => c === 'x';
+  const isFilledCell = (c: number): c is FilledSudokuCell => !isNaN(c) && 1 <= c && c <= gridSize;
+
   const toStrictResult: StrictSudokuEntries = [];
 
   for (const row of input) {
     const currentRowList: StrictSudokuEntry = [];
-    for (const char of row) {
-      const normalizedChar = char.toLowerCase();
-      if (regex.test(normalizedChar)) {
-        if (normalizedChar === 'x') currentRowList.push(normalizedChar);
-        else currentRowList.push(Number(normalizedChar) as SudokuCellElement);
-      }
-    }
+
+    row.split(',').forEach((maybeCell) => {
+      const cell = maybeCell.trim().toLowerCase();
+      const cellAsFilledCell = Number(cell);
+
+      if (isFilledCell(cellAsFilledCell)) currentRowList.push(Math.trunc(cellAsFilledCell));
+      else if (isEmptyCell(cell)) currentRowList.push(cell);
+    });
 
     if (currentRowList.length !== gridSize) {
       throw new InvalidRowLengthError(currentRowList, gridSize, { fromUnstrictRow: row });

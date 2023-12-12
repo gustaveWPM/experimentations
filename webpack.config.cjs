@@ -7,7 +7,7 @@ const resolve = require('path').resolve;
 /** @type {import('webpack').Configuration} */
 module.exports = {
   mode: 'production',
-  entry: './src/index.ts',
+  entry: './src/main.ts',
   output: {
     filename: 'bundle.js',
     path: resolve(__dirname, 'dist')

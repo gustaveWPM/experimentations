@@ -1,7 +1,7 @@
 import FailedToInitializeError from '@/errors/FailedToInitialize';
 import type { BuiltProgramOptions, LegalFinalOutput } from '@/types';
 import { EMPTY_CELL as _ } from '@/utils/emptyCell';
-import { strictSudokuKata, unstrictSudokuKata } from '../main';
+import { strictSudokuKata, unstrictSudokuKata } from '../app';
 
 describe('Fail to initialize', () => {
   const gridSize = 6;

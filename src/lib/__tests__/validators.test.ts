@@ -1,11 +1,18 @@
-import config from '@/config';
+import { config } from '@/config';
+import InvalidCellValueError from '@/errors/InvalidCellValue';
 import InvalidGridSizeError from '@/errors/InvalidGridSize';
 import InvalidRowLengthError from '@/errors/InvalidRowLength';
 import MissingRowsError from '@/errors/MissingRows';
 import type { Config, StrictSudokuEntries } from '@/types';
-import { throwIfInvalidConfig, throwIfInvalidGridSize, throwIfInvalidRowsLength, throwIfMissingRows } from '../validators';
+import { throwIfInvalidCellValue, throwIfInvalidConfig, throwIfInvalidGridSize, throwIfInvalidRowsLength, throwIfMissingRows } from '../validators';
 
 const { QUADRANT_SIZE } = config;
+
+describe('throwIfInvalidCellValue', () => {
+  it('should pass, given an invalid input and expecting the function to throw', () => {
+    expect(() => throwIfInvalidCellValue([[1, 2, 3]], 2)).toThrow(InvalidCellValueError);
+  });
+});
 
 describe('throwIfInvalidGridSize', () => {
   it("should pass, given a grid size which isn't a multiple of QUADRANT_SIZE and expecting the function to throw", () => {
@@ -37,11 +44,11 @@ describe('throwIfMissingRows', () => {
 
 describe('throwIfInvalidConfig', () => {
   it('should pass, given an input which is missing rows and expecting the function to throw', () => {
-    const __CONFIG = {
+    const fakeConfig = {
       QUADRANT_SIZE: 3,
       DEFAULT_GRID_SIZE: 10
     } satisfies Pick<Config, 'QUADRANT_SIZE'> & { DEFAULT_GRID_SIZE: number } satisfies Partial<Record<keyof Config, any>>;
 
-    expect(() => throwIfInvalidConfig(__CONFIG as any)).toThrow(InvalidGridSizeError);
+    expect(() => throwIfInvalidConfig(fakeConfig as any)).toThrow(InvalidGridSizeError);
   });
 });

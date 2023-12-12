@@ -1,4 +1,5 @@
-import config from '@/config';
+import { config } from '@/config';
+import InvalidCellValueError from '@/errors/InvalidCellValue';
 import InvalidGridSizeError from '@/errors/InvalidGridSize';
 import InvalidRowLengthError from '@/errors/InvalidRowLength';
 import MissingRowsError from '@/errors/MissingRows';
@@ -28,6 +29,18 @@ export function throwIfInvalidRowsLength(rows: StrictSudokuEntries, gridSize: Gr
   for (const row of rows) {
     if (row.length !== gridSize) {
       throw new InvalidRowLengthError(row, gridSize);
+    }
+  }
+}
+
+/**
+ * @throws {InvalidCellValueError}
+ */
+export function throwIfInvalidCellValue(rows: StrictSudokuEntries, gridSize: GridSize): void {
+  for (const row of rows) {
+    for (const cell of row) {
+      if (cell === 'x' || (1 <= cell && cell <= gridSize && Number.isInteger(cell))) continue;
+      throw new InvalidCellValueError(cell, gridSize);
     }
   }
 }
