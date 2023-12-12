@@ -1,12 +1,6 @@
-/* For JSDoc */
-// eslint-disable-next-line no-unused-vars
-import MissingRowsError from '@/errors/MissingRows';
-// eslint-disable-next-line no-unused-vars
-import InvalidGridSizeError from '@/errors/InvalidGridSize';
-
-import { config } from '@/config';
-import InvalidRowLengthError from '@/errors/InvalidRowLength';
-import { throwIfInvalidGridSize, throwIfMissingRows } from '@/lib/validators';
+import { config } from "@/config";
+import InvalidRowLengthError from "@/errors/InvalidRowLength";
+import { throwIfInvalidGridSize, throwIfMissingRows } from "@/lib/validators";
 import type {
   EmptySudokuCell,
   FilledSudokuCell,
@@ -19,9 +13,9 @@ import type {
   SudokuCellElement,
   UnstrictSudokuEntries,
   XCoord,
-  YCoord
-} from '@/types';
-import { EMPTY_CELL } from '@/utils/emptyCell';
+  YCoord,
+} from "@/types";
+import { EMPTY_CELL } from "@/utils/emptyCell";
 
 const { QUADRANT_SIZE } = config;
 
@@ -40,7 +34,7 @@ export function toUnstrict(input: StrictSudokuEntries, gridSize: GridSize): Unst
     if (entity.length !== gridSize) {
       throw new InvalidRowLengthError(entity, gridSize);
     }
-    toUnstrictResult.push(entity.map((e) => e.toString()).join(','));
+    toUnstrictResult.push(entity.map((e) => e.toString()).join(","));
   }
 
   return toUnstrictResult;
@@ -55,21 +49,22 @@ export function toStrict(input: UnstrictSudokuEntries, gridSize: GridSize): Stri
   throwIfInvalidGridSize(gridSize);
   throwIfMissingRows(input, gridSize);
 
-  const isEmptyCell = (c: string): c is EmptySudokuCell => c === 'x';
-  const isFilledCell = (c: number): c is FilledSudokuCell => !isNaN(c) && 1 <= c && c <= gridSize;
+  const isEmptyCell = (c: string): c is EmptySudokuCell => c === "x";
+  const isFilledCell = (c: number): c is FilledSudokuCell => !Number.isNaN(c) && 1 <= c && c <= gridSize;
 
   const toStrictResult: StrictSudokuEntries = [];
 
   for (const row of input) {
     const currentRowList: StrictSudokuEntry = [];
+    const maybeCells = row.split(",");
 
-    row.split(',').forEach((maybeCell) => {
+    for (const maybeCell of maybeCells) {
       const cell = maybeCell.trim().toLowerCase();
       const cellAsFilledCell = Number(cell);
 
       if (isFilledCell(cellAsFilledCell)) currentRowList.push(Math.trunc(cellAsFilledCell));
       else if (isEmptyCell(cell)) currentRowList.push(cell);
-    });
+    }
 
     if (currentRowList.length !== gridSize) {
       throw new InvalidRowLengthError(currentRowList, gridSize, { fromUnstrictRow: row });

@@ -4,13 +4,13 @@ class InvalidRowLengthError extends Error {
   constructor(row: unknown[], expected: RowLength, etc?: object) {
     super(
       `Got: ${row.length}` +
-        '\n' +
+        "\n" +
         `Expected: ${expected}` +
-        '\n' +
-        `Row dump: [${row.join(', ')}]` +
-        (etc ? '\n' + 'Additional dump:' + '\n' + JSON.stringify(etc, null, 2) : '')
+        "\n" +
+        `Row dump: [${row.join(", ")}]` +
+        (etc ? "\n" + "Additional dump:" + "\n" + JSON.stringify(etc, null, 2) : ""),
     );
-    this.name = 'InvalidRowLength';
+    this.name = "InvalidRowLength";
   }
 }
 

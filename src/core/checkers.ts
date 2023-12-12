@@ -1,5 +1,5 @@
-import { fromPointToQuadrantId, quadrantsToSets, toAsc } from '@/lib/convert';
-import dumpQuadrant from '@/lib/dumpQuadrant';
+import { fromPointToQuadrantId, quadrantsToSets, toAsc } from "@/lib/convert";
+import dumpQuadrant from "@/lib/dumpQuadrant";
 import type {
   CheckersMemory,
   ErrorCtx,
@@ -19,9 +19,9 @@ import type {
   StrictSudokuEntries,
   VerboseMode,
   XCoord,
-  YCoord
-} from '@/types';
-import { EMPTY_CELL } from '@/utils/emptyCell';
+  YCoord,
+} from "@/types";
+import { EMPTY_CELL } from "@/utils/emptyCell";
 
 const mallocValuesOccurrencesMemory = (gridSize: GridSize): CheckersMemory =>
   Array.from({ length: gridSize }, (_, i) => i + 1).reduce((memory, cellValue) => {
@@ -41,7 +41,7 @@ function populateIllegalQuadrantsArchivesWithMemory(
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive>,
   gridSize: GridSize,
-  isVerbose: VerboseMode
+  isVerbose: VerboseMode,
 ): MutateValuesEffect {
   for (let i: FilledSudokuCell = 1; i <= gridSize; i++) {
     if (memory[i].length > 1) {
@@ -79,7 +79,7 @@ async function checkQuadrants(
   quadrants: Quadrants,
   quadrantsSets: QuadrantsSets,
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
-  isVerbose: VerboseMode
+  isVerbose: VerboseMode,
 ): Promise<MutateValuesEffect> {
   const illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive> = isVerbose ? new Set<QuadrantId>() : undefined;
 
@@ -102,7 +102,7 @@ async function checkQuadrants(
   const errorCtx: ErrorCtx = illegalQuadrantsIds.length > 0;
 
   if (errorCtx) {
-    dumpError('INVALID QUADRANT (contains the same element twice)', quadrants, illegalQuadrantsArchive2 as IllegalQuadrantsArchive);
+    dumpError("INVALID QUADRANT (contains the same element twice)", quadrants, illegalQuadrantsArchive2 as IllegalQuadrantsArchive);
   }
 }
 
@@ -111,7 +111,7 @@ async function checkRows(
   gridSize: GridSize,
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   isVerbose: VerboseMode,
-  quadrants: Quadrants
+  quadrants: Quadrants,
 ): Promise<MutateValuesEffect> {
   const illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive> = isVerbose ? new Set<QuadrantId>() : undefined;
 
@@ -135,9 +135,9 @@ async function checkRows(
 
   if (errorCtx) {
     dumpError(
-      'INVALID QUADRANT (contains an element which is also in an another quadrant, in the same row)',
+      "INVALID QUADRANT (contains an element which is also in an another quadrant, in the same row)",
       quadrants,
-      illegalQuadrantsArchive2 as IllegalQuadrantsArchive
+      illegalQuadrantsArchive2 as IllegalQuadrantsArchive,
     );
   }
 }
@@ -147,7 +147,7 @@ async function checkColumns(
   gridSize: GridSize,
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   isVerbose: VerboseMode,
-  quadrants: Quadrants
+  quadrants: Quadrants,
 ): Promise<MutateValuesEffect> {
   const illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive> = isVerbose ? new Set<QuadrantId>() : undefined;
 
@@ -171,9 +171,9 @@ async function checkColumns(
 
   if (errorCtx) {
     dumpError(
-      'INVALID QUADRANT (contains an element which is also in an another quadrant, in the same column)',
+      "INVALID QUADRANT (contains an element which is also in an another quadrant, in the same column)",
       quadrants,
-      illegalQuadrantsArchive2 as IllegalQuadrantsArchive
+      illegalQuadrantsArchive2 as IllegalQuadrantsArchive,
     );
   }
 }
@@ -183,7 +183,7 @@ async function checkDiagonalFromTopLeftToBottomRight(
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   gridSize: GridSize,
   isVerbose: VerboseMode,
-  quadrants: Quadrants
+  quadrants: Quadrants,
 ): Promise<MutateValuesEffect> {
   const illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive> = isVerbose ? new Set<QuadrantId>() : undefined;
   const diagonalMemory: CheckersMemory = mallocValuesOccurrencesMemory(gridSize);
@@ -204,9 +204,9 @@ async function checkDiagonalFromTopLeftToBottomRight(
 
   if (errorCtx) {
     dumpError(
-      'INVALID QUADRANT (duplicate value in the top left to bottom right diagonal)',
+      "INVALID QUADRANT (duplicate value in the top left to bottom right diagonal)",
       quadrants,
-      illegalQuadrantsArchive2 as IllegalQuadrantsArchive
+      illegalQuadrantsArchive2 as IllegalQuadrantsArchive,
     );
   }
 }
@@ -216,7 +216,7 @@ async function checkDiagonalFromBottomLeftToTopRight(
   illegalQuadrantsArchive: IllegalQuadrantsArchive,
   gridSize: GridSize,
   isVerbose: VerboseMode,
-  quadrants: Quadrants
+  quadrants: Quadrants,
 ): Promise<MutateValuesEffect> {
   const illegalQuadrantsArchive2: MaybeUndefined<IllegalQuadrantsArchive> = isVerbose ? new Set<QuadrantId>() : undefined;
   const diagonalMemory: CheckersMemory = mallocValuesOccurrencesMemory(gridSize);
@@ -237,9 +237,9 @@ async function checkDiagonalFromBottomLeftToTopRight(
 
   if (errorCtx) {
     dumpError(
-      'INVALID QUADRANT (duplicate value in the bottom left to top right diagonal)',
+      "INVALID QUADRANT (duplicate value in the bottom left to top right diagonal)",
       quadrants,
-      illegalQuadrantsArchive2 as IllegalQuadrantsArchive
+      illegalQuadrantsArchive2 as IllegalQuadrantsArchive,
     );
   }
 }
@@ -253,14 +253,14 @@ async function checkGrid(input: StrictSudokuEntries, quadrants: Quadrants, gridS
     checkRows(input, gridSize, sharedIllegalQuadrantsArchive, isVerbose, quadrants),
     checkColumns(input, gridSize, sharedIllegalQuadrantsArchive, isVerbose, quadrants),
     checkDiagonalFromTopLeftToBottomRight(input, sharedIllegalQuadrantsArchive, gridSize, isVerbose, quadrants),
-    checkDiagonalFromBottomLeftToTopRight(input, sharedIllegalQuadrantsArchive, gridSize, isVerbose, quadrants)
+    checkDiagonalFromBottomLeftToTopRight(input, sharedIllegalQuadrantsArchive, gridSize, isVerbose, quadrants),
   ];
 
   await Promise.all(tasks);
 
-  if (sharedIllegalQuadrantsArchive.size === 0) return 'legal' as LegalFinalOutput;
+  if (sharedIllegalQuadrantsArchive.size === 0) return "legal" as LegalFinalOutput;
 
-  const illegalStatement: IllegalFinalOutput = toAsc(Array.from(sharedIllegalQuadrantsArchive)).join(',');
+  const illegalStatement: IllegalFinalOutput = toAsc(Array.from(sharedIllegalQuadrantsArchive)).join(",");
   return illegalStatement;
 }
 

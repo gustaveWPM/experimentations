@@ -1,5 +1,5 @@
-import { config } from '@/config';
-import type { GridSize, Index, Quadrant, Quadrants, StrictSudokuEntries, XCoord, YCoord } from '@/types';
+import { config } from "@/config";
+import type { GridSize, Index, Quadrant, Quadrants, StrictSudokuEntries, XCoord, YCoord } from "@/types";
 
 const { QUADRANT_SIZE } = config;
 

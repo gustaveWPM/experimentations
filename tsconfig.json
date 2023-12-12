@@ -9,6 +9,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "composite": true,
     "strict": true,
     "downlevelIteration": true,

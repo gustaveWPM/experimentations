@@ -1,9 +1,9 @@
-import type { Tuple } from './Utils';
+import type { Tuple } from "./Utils";
 
 type QuadrantSize = number;
 export type GridSize = number;
 
-export type EmptySudokuCell = 'x';
+export type EmptySudokuCell = "x";
 export type FilledSudokuCell = number;
 export type SudokuCellElement = EmptySudokuCell | FilledSudokuCell;
 
@@ -24,7 +24,7 @@ export type YCoord = number;
 export type Index = number;
 
 export type VerboseMode = boolean;
-export type LegalFinalOutput = 'legal';
+export type LegalFinalOutput = "legal";
 export type IllegalFinalOutput = string;
 export type FinalOutput = LegalFinalOutput | IllegalFinalOutput;
 

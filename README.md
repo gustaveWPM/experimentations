@@ -2,7 +2,6 @@
 
 Passing a _Sudoku_ grid as a `string[]`, like:
 
-<!-- prettier-ignore -->
 ```ts
 [
   "x,x,x,  1,2,3,  x,x,x",
@@ -38,6 +37,7 @@ The program must evaluate the grid, then return a `string` result.
 This project is built with a super mega cool workflow, you should give a look to its:
 
 - [`package.json` file](/package.json)
+- [`biome.json` file](/biome.json)
 - [_husky_ hooks](/.husky)
 - [_ts-prune_ hotfix](/.ts-prune)
 
@@ -168,11 +168,8 @@ It's a tad more captivating than a downright silly kata, as it might come in han
 Try:
 
 - [bun](https://bun.sh/)
+- [biome](https://biomejs.dev/)
 - [this ts-prune wrapper](https://github.com/gustaveWPM/ts-prune-with-false-positives-handling)
-
-Read:
-
-- [`package.json` file ("scripts" section)](/package.json)
 
 ## Bonus
 

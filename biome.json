@@ -1,0 +1,67 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 150,
+    "lineEnding": "lf",
+    "ignore": ["node_modules/", "dist/", "LICENSE", "./README.md"]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "all": false,
+      "nursery": {
+        "useGroupedTypeImport": "error",
+        "noUnusedImports": "error",
+        "noDuplicateJsonKeys": "error"
+      },
+      "correctness": {
+        "noUnusedVariables": "error",
+        "useIsNan": "error",
+        "noVoidTypeReturn": "error",
+        "noUnreachableSuper": "error",
+        "noUnreachable": "error",
+        "noUnnecessaryContinue": "error",
+        "noSwitchDeclarations": "error",
+        "noSelfAssign": "error",
+        "noInvalidConstructorSuper": "error",
+        "noInnerDeclarations": "error",
+        "noConstantCondition": "error"
+      },
+      "complexity": {
+        "useSimplifiedLogicExpression": "error",
+        "useSimpleNumberKeys": "error",
+        "useFlatMap": "error",
+        "noVoid": "error",
+        "noUselessSwitchCase": "error",
+        "noUselessRename": "error",
+        "noUselessCatch": "error",
+        "noForEach": "error"
+      },
+      "style": {
+        "useAsConstAssertion": "error",
+        "useShorthandArrayType": "error",
+        "useWhile": "error",
+        "noVar": "error",
+        "noUselessElse": "error",
+        "noParameterAssign": "off",
+        "useTemplate": "off"
+      },
+      "suspicious": {
+        "noGlobalIsNan": "error",
+        "noDuplicateObjectKeys": "error",
+        "noDoubleEquals": "error",
+        "noConfusingVoidType": "off",
+        "noExplicitAny": "off"
+      }
+    },
+    "include": ["**/*.{js,ts}"],
+    "ignore": ["node_modules/", "dist/"]
+  }
+}

@@ -1,10 +1,10 @@
-import FailedToInitializeError from '@/errors/FailedToInitialize';
-import buildOptions from '@/lib/buildOptions';
-import { buildQuadrants } from '@/lib/buildQuadrants';
-import { toStrict } from '@/lib/convert';
-import { throwIfInvalidCellValue, throwIfInvalidConfig, throwIfInvalidGridSize, throwIfInvalidRowsLength } from '@/lib/validators';
-import type { FinalOutput, GridSize, ProgramOptions, Quadrants, StrictSudokuEntries, UnstrictSudokuEntries, VerboseMode } from '@/types';
-import checkGrid from './checkers';
+import FailedToInitializeError from "@/errors/FailedToInitialize";
+import buildOptions from "@/lib/buildOptions";
+import { buildQuadrants } from "@/lib/buildQuadrants";
+import { toStrict } from "@/lib/convert";
+import { throwIfInvalidCellValue, throwIfInvalidConfig, throwIfInvalidGridSize, throwIfInvalidRowsLength } from "@/lib/validators";
+import type { FinalOutput, GridSize, ProgramOptions, Quadrants, StrictSudokuEntries, UnstrictSudokuEntries, VerboseMode } from "@/types";
+import checkGrid from "./checkers";
 
 async function processGrid(input: StrictSudokuEntries, gridSize: GridSize, isVerbose: VerboseMode): Promise<FinalOutput> {
   const quadrants: Quadrants = buildQuadrants(input, gridSize);
@@ -46,8 +46,6 @@ export async function strictSudokuKata(input: StrictSudokuEntries, options?: Pro
     throw new FailedToInitializeError(error.message, error);
   }
 
-  const sanitizedInput = input.map((row) => row.map((cell) => (cell === 'x' ? 'x' : Math.trunc(cell))));
-
-  const finalOutput: FinalOutput = await processGrid(sanitizedInput, gridSize, isVerbose);
+  const finalOutput: FinalOutput = await processGrid(input, gridSize, isVerbose);
   return finalOutput;
 }
