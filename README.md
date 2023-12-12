@@ -38,7 +38,6 @@ The program must evaluate the grid, then return a `string` result.
 This project is built with a super mega cool workflow, you should give a look to its:
 
 - [`package.json` file](/package.json)
-- [`webpack.config.cjs` file](/webpack.config.cjs)
 - [_husky_ hooks](/.husky)
 - [_ts-prune_ hotfix](/.ts-prune)
 
@@ -51,16 +50,16 @@ It's a tad more captivating than a downright silly kata, as it might come in han
 
   <table>
     <tr>
-      <td><code>bundle.js</code> generated file</td>
+      <td><code>main.js</code> generated file</td>
       <td><code>ts-node</code> script, using <em>bun</em>'s <em>TypeScript</em> runtime</td>
     </tr>
     <tr>
-      <td>~34.85156s seconds</td>
-      <td>~24.69157s seconds</td>
+      <td>~23.77955s seconds</td>
+      <td>~24.27656s seconds</td>
     </tr>
     <tr>
-      <td>~34.8µs per grid</td>
-      <td>~24.6µs per grid</td>
+      <td>~23.7µs per grid</td>
+      <td>~24.2µs per grid</td>
     </tr>
   </table>
   <em>(Benchmarked with a poor <strong>Intel i3-10110U (4) @ 4.100GHz</strong>, and <strong>7675MiB of RAM</strong>.)</em>
@@ -169,7 +168,6 @@ It's a tad more captivating than a downright silly kata, as it might come in han
 Try:
 
 - [bun](https://bun.sh/)
-- [SWC minification with webpack](https://webpack.js.org/plugins/terser-webpack-plugin/#swc)
 - [this ts-prune wrapper](https://github.com/gustaveWPM/ts-prune-with-false-positives-handling)
 
 Read:
