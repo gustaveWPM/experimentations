@@ -1,6 +1,8 @@
+import type { QuadrantSize } from "@/types";
+
 class InvalidQuadrantSizeError extends Error {
-  constructor(message: string) {
-    super(message);
+  constructor(got: QuadrantSize, message: string) {
+    super(`Got: ${got}` + "\n" + message);
     this.name = "InvalidQuadrantSize";
   }
 }

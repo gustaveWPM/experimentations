@@ -178,4 +178,4 @@ Try:
 ## Bonus
 
 - Handling _n_ x _n_ grid sizes
-- Handling _n_ quadrant sizes
+- Idem for quadrant sizes

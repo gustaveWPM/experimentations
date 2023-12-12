@@ -11,11 +11,11 @@ import type { Config, GridSize, QuadrantSize, StrictSudokuEntries, UnstrictSudok
  */
 export function throwIfInvalidQuadrantSize(quadrantSize: QuadrantSize): void {
   if (quadrantSize <= 1) {
-    throw new InvalidQuadrantSizeError("The quadrant size must be greater than or equal to 1.");
+    throw new InvalidQuadrantSizeError(quadrantSize, "The quadrant size must be greater than or equal to 1.");
   }
 
   if (!Number.isInteger(quadrantSize)) {
-    throw new InvalidQuadrantSizeError("The quadrant size must be an integer.");
+    throw new InvalidQuadrantSizeError(quadrantSize, "The quadrant size must be an integer.");
   }
 }
 
