@@ -76,12 +76,21 @@ describe("throwIfMissingRows", () => {
 });
 
 describe("throwIfInvalidConfig", () => {
-  it("should pass, given an invalid config and expecting the function to throw", () => {
+  it("should pass, given an invalid config (grid size) and expecting the function to throw", () => {
     const fakeConfig = {
       DEFAULT_QUADRANT_SIZE: 3,
       DEFAULT_GRID_SIZE: 10,
     } satisfies Pick<Config, "DEFAULT_QUADRANT_SIZE"> & { DEFAULT_GRID_SIZE: number } satisfies Partial<Record<keyof Config, any>>;
 
     expect(() => throwIfInvalidConfig(fakeConfig as any)).toThrow(InvalidGridSizeError);
+  });
+
+  it("should pass, given an invalid config (quadrant size) and expecting the function to throw", () => {
+    const fakeConfig = {
+      DEFAULT_QUADRANT_SIZE: -1,
+      DEFAULT_GRID_SIZE: 9,
+    } satisfies Pick<Config, "DEFAULT_GRID_SIZE"> & { DEFAULT_QUADRANT_SIZE: number } satisfies Partial<Record<keyof Config, any>>;
+
+    expect(() => throwIfInvalidConfig(fakeConfig as any)).toThrow(InvalidQuadrantSizeError);
   });
 });

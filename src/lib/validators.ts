@@ -78,6 +78,9 @@ export function throwIfMissingRows(input: StrictSudokuEntries | UnstrictSudokuEn
 
 /**
  * @throws {InvalidGridSizeError}
+ * @throws {InvalidQuadrantSizeError}
  */
-export const throwIfInvalidConfig = (__CONFIG: Config = config): void =>
+export function throwIfInvalidConfig(__CONFIG: Config = config): void {
   throwIfInvalidGridSize(__CONFIG.DEFAULT_GRID_SIZE, __CONFIG.DEFAULT_QUADRANT_SIZE);
+  throwIfInvalidQuadrantSize(__CONFIG.DEFAULT_QUADRANT_SIZE);
+}
