@@ -1,9 +1,10 @@
 .PHONY: all
 
 MAKEFLAGS += --silent
+PM = bun
 
 %:
-	bun "$@"
+	$(PM) "$@"
 
 all:
-	bun make
+	$(PM) make
