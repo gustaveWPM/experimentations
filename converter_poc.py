@@ -13,7 +13,7 @@ from converter.internal_lib.special_conversions import (
 )
 from converter.internal_lib.validation import is_number
 from converter.metaprog.choice_prompt_enum import ChoicePromptEnum
-from converter.metaprog.effects_classes import (
+from converter.metaprog.effects_types import (
     KeyboardEffects,
     PrintEffects,
     SysEffects,

@@ -6,7 +6,7 @@ from typing import List
 
 from converter.internal_lib.list import flatten, strlist_to_str
 from converter.metaprog.choice_prompt_enum import ChoicePromptEnum
-from converter.metaprog.effects_classes import KeyboardEffects, PrintEffects, SysEffects
+from converter.metaprog.effects_types import KeyboardEffects, PrintEffects, SysEffects
 from converter.metaprog.typing import Effects
 from converter.sys.input_handling import (
     input_handling_keyboard_interrupt_wrapper,

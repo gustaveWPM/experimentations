@@ -4,7 +4,7 @@
 import sys
 
 from converter.config.vocab import VOCAB
-from converter.metaprog.effects_classes import (
+from converter.metaprog.effects_types import (
     KeyboardEffects,
     PrintEffects,
     SysEffects,

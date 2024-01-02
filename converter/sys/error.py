@@ -1,7 +1,7 @@
 # coding: utf-8
 
 
-from converter.metaprog.effects_classes import PrintEffects, SysEffects
+from converter.metaprog.effects_types import PrintEffects, SysEffects
 from converter.metaprog.typing import Effects
 
 

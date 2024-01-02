@@ -10,5 +10,5 @@ class Effects(Generic[T]):
     def __init__(self) -> None:
         pass
 
-    def __class_getitem__(cls, params: T) -> None:
+    def __class_getitem__(cls, item: T) -> None:
         pass
